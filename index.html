@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test de Estilos de Aprendizaje</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "ui-sans-serif", "system-ui", "sans-serif"]
+          },
+          colors: {
+            slate900: "#0f172a",
+            slate800: "#1e293b",
+            indigo500: "#6366f1"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 5%, rgba(99, 102, 241, 0.22), transparent),
+        radial-gradient(ellipse 60% 50% at 90% 90%, rgba(124, 58, 237, 0.18), transparent),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(15, 23, 60, 0.6), transparent),
+        #0a0f1e;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #app { position: relative; z-index: 1; }
+
+    .fade-enter {
+      animation: fadeEnter 420ms ease both;
+    }
+
+    .fade-out {
+      animation: fadeOut 220ms ease both;
+    }
+
+    @keyframes fadeEnter {
+      from {
+        opacity: 0;
+        transform: translateY(14px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.985);
+      }
+    }
+
+    .glass-card {
+      background: linear-gradient(160deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.88));
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      box-shadow: 0 32px 96px rgba(2, 6, 23, 0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .option-button {
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .option-button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(129, 140, 248, 0.9);
+      background: rgba(51, 65, 85, 0.75);
+      box-shadow: 0 16px 40px rgba(79, 70, 229, 0.18), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .option-button:hover .option-label {
+      background: rgba(99, 102, 241, 0.35);
+      color: #c7d2fe;
+    }
+
+    .option-button:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .option-label {
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .bar-fill {
+      transition: width 900ms cubic-bezier(.2,.8,.2,1);
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans text-white antialiased">
+  <main id="app" class="min-h-screen px-4 py-6 sm:px-6 lg:px-8"></main>
+
+  <script>
+    const questions = [
+      {
+        id: 1,
+        text: "Cuando estás estudiando un tema completamente nuevo, ¿qué es lo primero que haces de manera natural?",
+        options: [
+          { label: "A", text: "Busco un video, diagrama o infografía del tema.", style: "Visual", techniques: ["Mapas Mentales", "Subrayado Estratégico"] },
+          { label: "B", text: "Leo el texto completo y destaco o escribo las ideas clave.", style: "Verbal", techniques: ["Método Cornell", "Método SQ3R"] },
+          { label: "C", text: "Intento explicármelo en voz alta o busco un podcast del tema.", style: "Auditivo", techniques: ["Técnica Feynman", "Recuerdo Activo"] },
+          { label: "D", text: "Busco ejercicios prácticos o me hago resúmenes en fichas.", style: "Kinestésico", techniques: ["Método Leitner", "Técnica Pomodoro"] }
+        ]
+      },
+      {
+        id: 2,
+        text: "Tienes un examen mañana y te sientes saturado/a de información. ¿Cuál es tu mayor problema?",
+        options: [
+          { label: "A", text: "Me cuesta mantener la concentración y me distraigo con cualquier cosa.", style: "Kinestésico", techniques: ["Técnica Pomodoro", "Regla de los 5 Min"] },
+          { label: "B", text: "Leo y leo, pero la información no se me queda grabada.", style: "Auditivo", techniques: ["Recuerdo Activo", "Palacio de la Memoria"] },
+          { label: "C", text: "El tema es muy abstracto y no logro conectar las ideas.", style: "Visual", techniques: ["Mapas Conceptuales", "Cuadro Sinóptico"] },
+          { label: "D", text: "El texto es tan denso que no sé qué es realmente importante.", style: "Verbal", techniques: ["Método Cornell", "Método SQ3R"] }
+        ]
+      },
+      {
+        id: 3,
+        text: "Necesitas memorizar una lista larga de conceptos exactos, fechas o vocabulario. ¿Qué estrategia prefieres?",
+        options: [
+          { label: "A", text: "Crear una historia absurda, un acrónimo o una rima con las iniciales.", style: "Verbal", techniques: ["Mnemotecnia"] },
+          { label: "B", text: "Diseñar tarjetas con la pregunta por delante y la respuesta por detrás.", style: "Kinestésico", techniques: ["Método Leitner"] },
+          { label: "C", text: "Asociar cada dato con un mueble o habitación de mi casa mentalmente.", style: "Auditivo", techniques: ["Palacio de la Memoria"] },
+          { label: "D", text: "Dibujar un mapa o diagrama donde cada dato tenga su lugar visual.", style: "Visual", techniques: ["Mapas Conceptuales", "Cuadro Sinóptico"] }
+        ]
+      },
+      {
+        id: 4,
+        text: "Cuando comparas dos teorías, autores o procesos, ¿qué te ayuda más?",
+        options: [
+          { label: "A", text: "Organizar todo en columnas cruzadas con características y diferencias.", style: "Visual", techniques: ["Cuadro Comparativo"] },
+          { label: "B", text: "Grabarme explicando las diferencias y luego escuchar el audio.", style: "Auditivo", techniques: ["Técnica Feynman"] },
+          { label: "C", text: "Hacer una lectura profunda dividida en fases: examinar, preguntar, leer, repetir y registrar.", style: "Verbal", techniques: ["Método SQ3R"] },
+          { label: "D", text: "Hacer una tarjeta para cada concepto y ordenarlas físicamente para compararlas.", style: "Kinestésico", techniques: ["Método Leitner", "Timeblocking"] }
+        ]
+      },
+      {
+        id: 5,
+        text: "Estás leyendo un PDF o libro de texto extenso. ¿Cómo interactúas con él?",
+        options: [
+          { label: "A", text: "Divido la página: notas clave a la izquierda, resumen abajo, ideas principales a la derecha.", style: "Verbal", techniques: ["Método Cornell"] },
+          { label: "B", text: "Uso diferentes colores de resaltadores con un sistema estricto por tipo de contenido.", style: "Visual", techniques: ["Subrayado Estratégico"] },
+          { label: "C", text: "Leo un párrafo, cierro el libro e intento escribir o decir de memoria lo que entendí.", style: "Auditivo", techniques: ["Recuerdo Activo"] },
+          { label: "D", text: "Hago fichas de resumen al final de cada sección para autoevaluarme después.", style: "Kinestésico", techniques: ["Método Leitner", "Técnica Pomodoro"] }
+        ]
+      },
+      {
+        id: 6,
+        text: "¿Cómo describes mejor tu relación con el tiempo cuando estudias?",
+        options: [
+          { label: "A", text: "Necesito ver mi progreso escrito; anoto cuánto llevo y cuánto falta.", style: "Kinestésico", techniques: ["Timeblocking", "Método Leitner"] },
+          { label: "B", text: "Aprendo mejor cuando puedo repasar mis esquemas visuales al final de cada sesión.", style: "Visual", techniques: ["Mapas Mentales", "Subrayado Estratégico"] },
+          { label: "C", text: "Funciono mejor explicando el tema en voz alta mientras estudio, aunque sea solo.", style: "Auditivo", techniques: ["Técnica Feynman", "Recuerdo Activo"] },
+          { label: "D", text: "Prefiero leer mis notas organizadas y reescribir los puntos clave al terminar.", style: "Verbal", techniques: ["Método Cornell", "Mnemotecnia"] }
+        ]
+      },
+      {
+        id: 7,
+        text: "Te das cuenta de que dominas un tema cuando eres capaz de:",
+        options: [
+          { label: "A", text: "Explicárselo de forma tan sencilla que cualquier persona lo entiende.", style: "Auditivo", techniques: ["Técnica Feynman"] },
+          { label: "B", text: "Dibujar un esquema jerárquico con ramificaciones y colores sin ver los apuntes.", style: "Visual", techniques: ["Mapas Mentales"] },
+          { label: "C", text: "Responder correctamente una batería de tarjetas clasificadas por dificultad.", style: "Kinestésico", techniques: ["Método Leitner"] },
+          { label: "D", text: "Redactar un resumen estructurado y preciso sin consultar ninguna fuente.", style: "Verbal", techniques: ["Método Cornell", "Mnemotecnia"] }
+        ]
+      },
+      {
+        id: 8,
+        text: "¿Qué tipo de material te ayuda más a retener información antes de un examen?",
+        options: [
+          { label: "A", text: "Un diagrama de llaves que desglosa las ideas de lo general a lo particular.", style: "Visual", techniques: ["Cuadro Sinóptico"] },
+          { label: "B", text: "Una grabación de voz propia explicando el tema con mis propias palabras.", style: "Auditivo", techniques: ["Recuerdo Activo", "Palacio de la Memoria"] },
+          { label: "C", text: "Un documento limpio con notas marginales estructuradas y resumen al final.", style: "Verbal", techniques: ["Método Cornell"] },
+          { label: "D", text: "Un mazo de tarjetas ordenadas de menor a mayor dificultad para repasar en cualquier momento.", style: "Kinestésico", techniques: ["Método Leitner", "Regla de los 5 Min"] }
+        ]
+      },
+      {
+        id: 9,
+        text: "Si estudias con un compañero, ¿cuál sería la dinámica ideal para ti?",
+        options: [
+          { label: "A", text: "Hacerle preguntas rápidas usando fichas de estudio y competir a ver quién falla menos.", style: "Kinestésico", techniques: ["Método Leitner"] },
+          { label: "B", text: "Debatir el tema, cuestionar los puntos del otro y dar ejemplos en voz alta.", style: "Auditivo", techniques: ["Recuerdo Activo", "Técnica Feynman"] },
+          { label: "C", text: "Intercambiar mapas mentales o cuadros comparativos para ver qué detalles omitió el otro.", style: "Visual", techniques: ["Mapas Mentales", "Cuadro Comparativo"] },
+          { label: "D", text: "Que cada uno explique el tema por escrito y comparemos los apuntes para complementarlos.", style: "Verbal", techniques: ["Método Cornell", "Método SQ3R"] }
+        ]
+      },
+      {
+        id: 10,
+        text: "Cuando tienes pereza extrema para empezar a estudiar, ¿qué idea te convence más para arrancar?",
+        options: [
+          { label: "A", text: "\"Solo voy a dibujar el mapa mental del tema durante 10 minutos, sin más compromisos.\"", style: "Visual", techniques: ["Mapas Mentales", "Cuadro Sinóptico"] },
+          { label: "B", text: "\"Voy a abrir mi agenda, bloquear la hora exacta y preparar mi lugar de estudio.\"", style: "Kinestésico", techniques: ["Timeblocking", "Regla de los 5 Min"] },
+          { label: "C", text: "\"Voy a repasar mis apuntes escritos 5 minutos y ver si entro en modo estudio.\"", style: "Verbal", techniques: ["Método SQ3R", "Mnemotecnia"] },
+          { label: "D", text: "\"Voy a escuchar o repetir en voz alta los puntos clave del tema para calentarme.\"", style: "Auditivo", techniques: ["Recuerdo Activo", "Palacio de la Memoria"] }
+        ]
+      },
+      {
+        id: 11,
+        text: "¿Cómo prefieres repasar el día antes de un examen importante?",
+        options: [
+          { label: "A", text: "Recorrer mentalmente cada concepto como si caminara por habitaciones de una casa.", style: "Auditivo", techniques: ["Palacio de la Memoria"] },
+          { label: "B", text: "Repasar mis tarjetas clasificadas y detenerme solo en las que me están fallando.", style: "Kinestésico", techniques: ["Método Leitner", "Técnica Pomodoro"] },
+          { label: "C", text: "Inventar frases clave, acrónimos o historias raras para recordar los datos exactos.", style: "Verbal", techniques: ["Mnemotecnia", "Método SQ3R"] },
+          { label: "D", text: "Revisar mis mapas o cuadros visuales y verificar que todo esté conectado lógicamente.", style: "Visual", techniques: ["Mapas Conceptuales", "Cuadro Comparativo"] }
+        ]
+      },
+      {
+        id: 12,
+        text: "A la hora de planificar una semana con varios exámenes, ¿qué haces?",
+        options: [
+          { label: "A", text: "Asigno bloques de tiempo fijos en mi agenda para cada materia como citas inamovibles.", style: "Kinestésico", techniques: ["Timeblocking"] },
+          { label: "B", text: "Diseño una tabla comparativa de materias con temas, fechas y nivel de dificultad.", style: "Visual", techniques: ["Cuadro Comparativo", "Cuadro Sinóptico"] },
+          { label: "C", text: "Escribo un plan con mis propias palabras: qué leer, en qué orden y qué resumir cada día.", style: "Verbal", techniques: ["Método Cornell", "Método SQ3R"] },
+          { label: "D", text: "Me grabo un audio o me explico el plan en voz alta para verificar que tiene sentido.", style: "Auditivo", techniques: ["Técnica Feynman", "Recuerdo Activo"] }
+        ]
+      }
+    ];
+
+    const styleDescriptions = {
+      "Visual": {
+        emoji: "🗺️",
+        description: "Procesas el mundo a través de imágenes, esquemas y estructuras. Tu cerebro convierte la información abstracta en mapas y patrones visuales antes de comprenderla profundamente. Eres quien llena márgenes de cuadernos con diagramas y flechas sin darse cuenta."
+      },
+      "Verbal": {
+        emoji: "📝",
+        description: "Las palabras son tu herramienta de pensamiento. Necesitas leer, escribir y estructurar para que el conocimiento se vuelva tuyo. Eres quien recuerda exactamente en qué página estaba una idea y cómo estaba redactada."
+      },
+      "Auditivo": {
+        emoji: "🎧",
+        description: "Aprendes escuchando, hablando y explicando. La información cobra vida cuando la puedes verbalizar o escuchar. Eres quien entiende un tema en el momento exacto en que intenta explicárselo a alguien más."
+      },
+      "Kinestésico": {
+        emoji: "⚡",
+        description: "Aprendes haciendo, tocando y experimentando. Necesitas acción para que el conocimiento se ancle. Eres quien aprende más en un laboratorio o ejercicio práctico que leyendo el capítulo completo del libro."
+      }
+    };
+
+    const techniqueDescriptions = {
+      "Mapas Mentales": "Dibuja el tema central en el medio de una hoja y ramifica ideas con colores y dibujos. Activa ambos hemisferios cerebrales y convierte temas complejos en estructuras visuales memorables.",
+      "Cuadro Sinóptico": "Usa llaves {} para desglosar un tema de lo general a lo particular. Ideal para jerarquizar conceptos y ver de un vistazo toda la estructura de un tema.",
+      "Mapas Conceptuales": "Conecta conceptos con flechas y palabras de enlace como 'produce', 'depende de' o 'es un tipo de'. Perfectos para materias donde las relaciones entre ideas son más importantes que los datos.",
+      "Cuadro Comparativo": "Crea una tabla donde las filas son criterios y las columnas son los elementos a comparar. Elimina la confusión entre conceptos similares de forma visual e instantánea.",
+      "Subrayado Estratégico": "Asigna un color específico a cada tipo de información (amarillo: definiciones, verde: ejemplos, rosa: fechas). Convierte el subrayado en un sistema de codificación, no en pintar por pintar.",
+      "Método Cornell": "Divide tu hoja en tres zonas: columna izquierda para preguntas clave, zona derecha para notas durante la clase, y banda inferior para el resumen final. Estructura que obliga a procesar la info dos veces.",
+      "Método SQ3R": "Cinco pasos: Survey (ojear), Question (preguntar), Read (leer), Recite (repetir) y Review (repasar). Convierte la lectura pasiva en un proceso activo y sistemático.",
+      "Mnemotecnia": "Crea acrónimos, historias absurdas o rimas para anclar datos exactos. El cerebro recuerda lo raro con mucha más facilidad que lo lógico.",
+      "Técnica Feynman": "Toma una hoja en blanco y explica el tema como si se lo enseñaras a un niño de 12 años. Donde tu explicación se traba, está exactamente el hueco en tu comprensión.",
+      "Recuerdo Activo": "En lugar de releer, cierra el libro e intenta recuperar la información de memoria. Cada intento de recordar, aunque falle, fortalece la conexión neuronal más que releer cien veces.",
+      "Palacio de la Memoria": "Asocia cada concepto que necesitas recordar con un lugar específico de tu casa o ruta conocida. Cuando necesites recordarlo, 'camina' mentalmente por ese lugar.",
+      "Método Leitner": "Sistema de tarjetas con cajas de repaso espaciado. Las que fallas vuelven a la caja 1; las que aciertas avanzan. Estudias más lo que no sabes y menos lo que ya dominas.",
+      "Técnica Pomodoro": "25 minutos de concentración total + 5 minutos de descanso obligatorio. Engaña al cerebro procrastinador haciendo el compromiso de tiempo parecer manejable.",
+      "Regla de los 5 Minutos": "Comprométete a estudiar solo 5 minutos. El inicio es el mayor obstáculo; una vez que empiezas, la inercia mental hace el resto. Es casi imposible parar a los 5 minutos exactos.",
+      "Timeblocking": "Bloquea en tu calendario franjas de tiempo específicas para tareas específicas. Tratar el estudio como una cita inamovible elimina la negociación mental de '¿cuándo lo hago?'."
+    };
+
+    const stylesOrder = ["Visual", "Verbal", "Auditivo", "Kinestésico"];
+    const maxPosibles = { Visual: 11, Verbal: 12, Auditivo: 11, Kinestésico: 11 };
+    const app = document.getElementById("app");
+
+    const techniqueOrder = {};
+    let orderCounter = 0;
+
+    questions.forEach((question) => {
+      question.options.forEach((option) => {
+        option.techniques.forEach((technique) => {
+          if (techniqueOrder[technique] === undefined) {
+            techniqueOrder[technique] = orderCounter;
+            orderCounter += 1;
+          }
+        });
+      });
+    });
+
+    const state = {
+      currentQuestion: 0,
+      answers: [],
+      scores: { Visual: 0, Verbal: 0, Auditivo: 0, Kinestésico: 0 },
+      techniqueScores: Object.keys(techniqueDescriptions).reduce((acc, technique) => {
+        acc[technique] = 0;
+        return acc;
+      }, {})
+    };
+
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function attachStartHandler() {
+      const button = document.querySelector("[data-start]");
+      if (button) {
+        button.addEventListener("click", startQuiz);
+      }
+    }
+
+    function renderWelcome() {
+      app.innerHTML = `
+        <section class="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center justify-center">
+          <div class="fade-enter grid w-full gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div class="space-y-7">
+              <div class="inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200">
+                Test interactivo universitario
+              </div>
+              <div class="space-y-5">
+                <h1 class="text-5xl font-black leading-[0.96] tracking-tight text-white sm:text-6xl lg:text-7xl">
+                  Descubre cómo aprende mejor tu mente
+                </h1>
+                <p class="max-w-2xl text-xl leading-8 text-slate-300 sm:text-2xl">
+                  Identifica tu estilo de aprendizaje predominante y recibe dos técnicas concretas para estudiar con más claridad, foco y estrategia.
+                </p>
+              </div>
+              <div class="grid max-w-2xl gap-3 text-base leading-7 text-slate-300 sm:text-lg">
+                <p>Responde 12 situaciones reales de estudio. No hay respuestas buenas o malas.</p>
+                <p>Elige la opción que más se parece a ti y el test avanzará automáticamente.</p>
+              </div>
+              <button
+                type="button"
+                data-start
+                class="group inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-indigo-500 px-7 py-4 text-lg font-bold text-white shadow-2xl shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:bg-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-300/30 sm:w-auto"
+              >
+                Comenzar test
+                <span class="transition group-hover:translate-x-1">→</span>
+              </button>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-5 sm:p-7">
+              <div class="rounded-[1.5rem] border border-white/10 bg-slate-900/70 p-6">
+                <div class="mb-7 flex items-center justify-between">
+                  <span class="text-sm font-semibold uppercase tracking-[0.24em] text-indigo-200">Estilos de aprendizaje</span>
+                  <span class="rounded-full bg-indigo-500/20 px-3 py-1 text-sm font-bold text-indigo-100">12 preguntas</span>
+                </div>
+                <div class="space-y-3 mb-7">
+                  <div class="h-3 w-10/12 rounded-full bg-gradient-to-r from-indigo-400/80 to-violet-400/60"></div>
+                  <div class="h-3 w-8/12 rounded-full bg-slate-500/50"></div>
+                  <div class="ml-6 h-3 w-9/12 rounded-full bg-slate-600/50"></div>
+                  <div class="ml-6 h-3 w-6/12 rounded-full bg-indigo-300/60"></div>
+                  <div class="ml-12 h-3 w-7/12 rounded-full bg-slate-500/50"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                  ${stylesOrder.map((style) => `
+                    <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 hover:bg-white/[0.07] transition">
+                      <div class="text-2xl mb-2">${styleDescriptions[style].emoji}</div>
+                      <div class="text-sm font-bold text-white">${escapeHTML(style)}</div>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      attachStartHandler();
+    }
+
+    function startQuiz() {
+      resetState();
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const question = questions[state.currentQuestion];
+      const previousProgress = (state.currentQuestion / questions.length) * 100;
+      const currentProgress = ((state.currentQuestion + 1) / questions.length) * 100;
+
+      app.innerHTML = `
+        <section class="mx-auto flex min-h-[calc(100vh-3rem)] max-w-4xl flex-col justify-center">
+          <div class="mb-8">
+            <div class="mb-3 flex items-center justify-between gap-4 text-sm font-semibold text-slate-300">
+              <span>Pregunta ${state.currentQuestion + 1} de ${questions.length}</span>
+              <span>${Math.round(currentProgress)}%</span>
+            </div>
+            <div class="h-3 overflow-hidden rounded-full bg-slate-800 ring-1 ring-white/10">
+              <div class="bar-fill h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-400" style="width: ${previousProgress}%" data-progress="${currentProgress}%"></div>
+            </div>
+          </div>
+
+          <article id="question-card" class="glass-card fade-enter rounded-[1.75rem] p-5 sm:p-8 lg:p-10">
+            <div class="mb-7 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-500 text-lg font-black text-white shadow-lg shadow-indigo-500/25">
+              ${question.id}
+            </div>
+            <h2 class="mb-8 text-2xl font-black leading-tight text-white sm:text-3xl lg:text-4xl">
+              ${escapeHTML(question.text)}
+            </h2>
+            <div class="grid gap-4">
+              ${question.options.map((option) => `
+                <button
+                  type="button"
+                  data-answer="${option.label}"
+                  class="option-button flex w-full items-start gap-4 rounded-2xl border border-slate-600/70 bg-slate-800/70 p-4 text-left focus:outline-none focus:ring-4 focus:ring-indigo-400/25 sm:p-5"
+                >
+                  <span class="option-label flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/15 text-base font-black text-indigo-200 ring-1 ring-indigo-300/20">
+                    ${option.label}
+                  </span>
+                  <span class="pt-1 text-base font-medium leading-7 text-slate-100 sm:text-lg">
+                    ${escapeHTML(option.text)}
+                  </span>
+                </button>
+              `).join("")}
+            </div>
+          </article>
+        </section>
+      `;
+
+      attachAnswerHandlers();
+      animateBars("[data-progress]", "progress");
+    }
+
+    function attachAnswerHandlers() {
+      document.querySelectorAll("[data-answer]").forEach((button) => {
+        button.addEventListener("click", () => selectAnswer(button.dataset.answer), { once: true });
+      });
+    }
+
+    function selectAnswer(label) {
+      const question = questions[state.currentQuestion];
+      const option = question.options.find((item) => item.label === label);
+      const card = document.getElementById("question-card");
+
+      state.answers.push({
+        questionId: question.id,
+        label: option.label,
+        style: option.style,
+        techniques: option.techniques
+      });
+
+      state.scores[option.style] += 1;
+      option.techniques.forEach((technique) => {
+        state.techniqueScores[technique] += 1;
+      });
+
+      document.querySelectorAll("[data-answer]").forEach((button) => {
+        button.disabled = true;
+      });
+
+      if (card) {
+        card.classList.remove("fade-enter");
+        card.classList.add("fade-out");
+      }
+
+      setTimeout(() => {
+        state.currentQuestion += 1;
+
+        if (state.currentQuestion < questions.length) {
+          renderQuestion();
+        } else {
+          showCalculatingScreen();
+          setTimeout(renderResults, 650);
+        }
+      }, 230);
+    }
+
+    function showCalculatingScreen() {
+      app.innerHTML = `
+        <section class="mx-auto flex min-h-[calc(100vh-3rem)] max-w-3xl items-center justify-center text-center">
+          <div class="glass-card fade-enter rounded-[2rem] p-8 sm:p-12 w-full">
+            <div class="mx-auto mb-8 relative h-16 w-16">
+              <div class="absolute inset-0 rounded-full border-4 border-indigo-300/15"></div>
+              <div class="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-indigo-400 border-r-violet-400" style="animation-duration:900ms"></div>
+              <div class="absolute inset-2 animate-spin rounded-full border-4 border-transparent border-b-indigo-300/50" style="animation-duration:1400ms;animation-direction:reverse"></div>
+            </div>
+            <h2 class="text-3xl font-black text-white sm:text-4xl">Analizando tu perfil<span class="animate-pulse">...</span></h2>
+            <p class="mt-4 text-lg leading-8 text-slate-400">
+              Cruzando tus respuestas con la matriz de aprendizaje.
+            </p>
+            <div class="mt-8 flex justify-center gap-3">
+              ${["Visual","Verbal","Auditivo","Kinestésico"].map((s,i) => `
+                <div class="rounded-full px-3 py-1 text-xs font-bold text-indigo-300/70 border border-indigo-300/20 bg-indigo-500/10" style="animation: fadeEnter 400ms ${i * 120}ms ease both">${s}</div>
+              `).join("")}
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function calculateResult() {
+      const normalizedScores = stylesOrder.reduce((acc, style) => {
+        acc[style] = state.scores[style] / maxPosibles[style];
+        return acc;
+      }, {});
+
+      const winner = [...stylesOrder].sort((a, b) => {
+        const normalizedDifference = normalizedScores[b] - normalizedScores[a];
+
+        if (Math.abs(normalizedDifference) >= 0.01) {
+          return normalizedDifference;
+        }
+
+        const rawDifference = state.scores[b] - state.scores[a];
+
+        if (rawDifference !== 0) {
+          return rawDifference;
+        }
+
+        return stylesOrder.indexOf(a) - stylesOrder.indexOf(b);
+      })[0];
+
+      const winnerTechniques = Object.keys(techniqueDescriptions).filter((technique) => {
+        return questions.some((question) => {
+          return question.options.some((option) => {
+            return option.style === winner && option.techniques.includes(technique);
+          });
+        });
+      });
+
+      const topTechniques = winnerTechniques
+        .sort((a, b) => {
+          const scoreDifference = state.techniqueScores[b] - state.techniqueScores[a];
+
+          if (scoreDifference !== 0) {
+            return scoreDifference;
+          }
+
+          return techniqueOrder[a] - techniqueOrder[b];
+        })
+        .slice(0, 2);
+
+      return {
+        winner,
+        normalizedScores,
+        topTechniques
+      };
+    }
+
+    function renderResults() {
+      const result = calculateResult();
+      const winnerInfo = styleDescriptions[result.winner];
+
+      app.innerHTML = `
+        <section class="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center justify-center">
+          <div class="fade-enter w-full space-y-7">
+            <div class="text-center">
+              <p class="mb-3 text-sm font-bold uppercase tracking-[0.28em] text-indigo-200">Resultado personalizado</p>
+              <h1 class="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">Tu forma de aprender tiene patrón</h1>
+            </div>
+
+            <div class="glass-card rounded-[2rem] p-5 sm:p-8 lg:p-10">
+              <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+                <div class="space-y-6">
+                  <div class="rounded-[1.5rem] border border-indigo-300/20 bg-indigo-500/15 p-6">
+                    <div class="mb-4 text-5xl">${winnerInfo.emoji}</div>
+                    <div class="inline-flex rounded-full bg-indigo-500 px-5 py-2 text-sm font-black uppercase tracking-[0.18em] text-white shadow-lg shadow-indigo-500/25">
+                      ${escapeHTML(result.winner)}
+                    </div>
+                    <p class="mt-5 text-lg leading-8 text-slate-100">
+                      ${escapeHTML(winnerInfo.description)}
+                    </p>
+                  </div>
+
+                  <div class="rounded-[1.5rem] border border-white/10 bg-slate-900/50 p-6">
+                    <h2 class="mb-5 text-xl font-black text-white">Tu perfil de aprendizaje</h2>
+                    <div class="space-y-5">
+                      ${stylesOrder.map((style) => {
+                        const percentage = Math.round(result.normalizedScores[style] * 100);
+                        return `
+                          <div>
+                            <div class="mb-2 flex items-center justify-between gap-4 text-sm font-semibold">
+                              <span class="text-slate-200">${styleDescriptions[style].emoji} ${escapeHTML(style)}</span>
+                              <span class="text-indigo-200">${percentage}%</span>
+                            </div>
+                            <div class="h-4 overflow-hidden rounded-full bg-slate-800 ring-1 ring-white/10">
+                              <div class="bar-fill h-full rounded-full ${style === result.winner ? "bg-indigo-500" : "bg-slate-500"}" style="width: 0%" data-width="${percentage}%"></div>
+                            </div>
+                          </div>
+                        `;
+                      }).join("")}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-5">
+                  <div>
+                    <p class="text-sm font-bold uppercase tracking-[0.24em] text-indigo-200">Recomendación práctica</p>
+                    <h2 class="mt-2 text-3xl font-black text-white">Tu Top 2 de Técnicas</h2>
+                  </div>
+
+                  ${result.topTechniques.map((technique, index) => `
+                    <article class="rounded-[1.5rem] border border-white/10 bg-white/[0.045] p-6 transition hover:border-indigo-300/40 hover:bg-white/[0.07]">
+                      <div class="mb-4 flex items-center justify-between gap-4">
+                        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-500/20 text-lg font-black text-indigo-100 ring-1 ring-indigo-300/20">
+                          ${index + 1}
+                        </span>
+                        <span class="rounded-full bg-slate-900/70 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-300">
+                          ${state.techniqueScores[technique]} puntos
+                        </span>
+                      </div>
+                      <h3 class="text-2xl font-black text-white">${escapeHTML(technique)}</h3>
+                      <p class="mt-3 text-base leading-7 text-slate-300">
+                        ${escapeHTML(techniqueDescriptions[technique])}
+                      </p>
+                    </article>
+                  `).join("")}
+
+                  <button
+                    type="button"
+                    data-restart
+                    class="mt-2 inline-flex w-full items-center justify-center rounded-2xl bg-indigo-500 px-7 py-4 text-lg font-bold text-white shadow-2xl shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:bg-indigo-400 focus:outline-none focus:ring-4 focus:ring-indigo-300/30"
+                  >
+                    Volver a empezar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      const restartButton = document.querySelector("[data-restart]");
+      if (restartButton) {
+        restartButton.addEventListener("click", restartApp);
+      }
+
+      animateBars("[data-width]", "width");
+    }
+
+    function animateBars(selector, datasetKey) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          document.querySelectorAll(selector).forEach((bar) => {
+            bar.style.width = bar.dataset[datasetKey];
+          });
+        });
+      });
+    }
+
+    function resetState() {
+      state.currentQuestion = 0;
+      state.answers = [];
+      state.scores = { Visual: 0, Verbal: 0, Auditivo: 0, Kinestésico: 0 };
+      Object.keys(state.techniqueScores).forEach((technique) => {
+        state.techniqueScores[technique] = 0;
+      });
+    }
+
+    function restartApp() {
+      resetState();
+      renderWelcome();
+    }
+
+    renderWelcome();
+  </script>
+</body>
+</html>
